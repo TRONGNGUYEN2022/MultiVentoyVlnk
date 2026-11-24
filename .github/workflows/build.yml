@@ -1,4 +1,4 @@
-name: Build MultiVentoyVlnk EXE
+name: Build MultiVentoyVlnk Tiny EXE
 
 on:
   push:
@@ -18,13 +18,13 @@ jobs:
         with:
           arch: x64
 
-      - name: Compile MultiVentoyVlnk.exe (Static CRT + Admin Manifest)
+      - name: Compile MultiVentoyVlnk.exe (Pure C + Optimize Size + Static CRT)
         shell: cmd
         run: |
-          cl /nologo /O2 /MT /EHsc /utf-8 MultiVentoyVlnk.cpp /Fe:MultiVentoyVlnk.exe /link /SUBSYSTEM:WINDOWS /MANIFEST:EMBED /MANIFESTUAC:"level='requireAdministrator' uiAccess='false'" user32.lib gdi32.lib comdlg32.lib shell32.lib ole32.lib
+          cl /nologo /O1 /Os /GL /MT /utf-8 MultiVentoyVlnk.c /Fe:MultiVentoyVlnk.exe /link /LTCG /OPT:REF /OPT:ICF /SUBSYSTEM:WINDOWS /MANIFEST:EMBED /MANIFESTUAC:"level='requireAdministrator' uiAccess='false'" user32.lib gdi32.lib comdlg32.lib shell32.lib ole32.lib
 
       - name: Upload MultiVentoyVlnk.exe Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: MultiVentoyVlnk-Windows-x64
+          name: MultiVentoyVlnk-Tiny-x64
           path: MultiVentoyVlnk.exe
